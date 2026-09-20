@@ -7,28 +7,6 @@ if not game:IsLoaded() then
         game.Loaded:Wait()
 end
 
-
--- ==========================================
--- BLACKLIST (bloqueados no pueden ejecutar)
--- ==========================================
-do
-	local usuariosBloqueados = {
-		[] = true,
-	}
-	local lp = game:GetService("Players").LocalPlayer
-	if lp and usuariosBloqueados[lp.UserId] then
-		warn("[Vortex X Sage] Acceso denegado. No tienes permitido usar este script.")
-		pcall(function()
-			game:GetService("StarterGui"):SetCore("SendNotification", {
-				Title = "Vortex X Sage",
-				Text = "Acceso denegado.",
-				Duration = 5,
-			})
-		end)
-		return
-	end
-end
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
