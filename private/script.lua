@@ -7,6 +7,28 @@ if not game:IsLoaded() then
         game.Loaded:Wait()
 end
 
+
+-- ==========================================
+-- BLACKLIST (bloqueados no pueden ejecutar)
+-- ==========================================
+do
+	local usuariosBloqueados = {
+		[3677329429] = true,
+	}
+	local lp = game:GetService("Players").LocalPlayer
+	if lp and usuariosBloqueados[lp.UserId] then
+		warn("[Vortex X Sage] Acceso denegado. No tienes permitido usar este script.")
+		pcall(function()
+			game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Vortex X Sage",
+				Text = "Acceso denegado.",
+				Duration = 5,
+			})
+		end)
+		return
+	end
+end
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -33,7 +55,6 @@ local games = {
         [142823291]       = "MM2.lua",
         [125927821145949] = "MOUNTAIN.lua",
         [107778070777162] = "StealAnEgg.lua",
-        [189707] = "SurvDisaster.lua",
 }
 
 local function tween(obj, t, props, style, dir)
@@ -317,7 +338,7 @@ footer.BackgroundTransparency = 1
 footer.Font = Enum.Font.Gotham
 footer.TextSize = 11
 footer.TextColor3 = Color3.fromRGB(110, 110, 120)
-footer.Text = "By Israelcc & Novak · Vortex X Sage"
+footer.Text = "By Israelcc · Vortex X Sage"
 footer.Parent = cover
 
 -- ================= SOUND LOOP =================
