@@ -13,7 +13,7 @@ end
 -- ==========================================
 do
 	local usuariosBloqueados = {
-		[3677329429] = true,
+		[] = true,
 	}
 	local lp = game:GetService("Players").LocalPlayer
 	if lp and usuariosBloqueados[lp.UserId] then
