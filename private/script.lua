@@ -85,7 +85,8 @@ local function resolveScriptFile()
 		return "SurvDisaster.lua"
 	end
 
-	return nil
+	-- 4) Fallback: juego no listado → Universal Hub
+	return "Universal.lua"
 end
 
 local function tween(obj, t, props, style, dir)
@@ -316,7 +317,7 @@ subtitle.BackgroundTransparency = 1
 subtitle.Font = Enum.Font.Gotham
 subtitle.TextSize = 13
 subtitle.TextColor3 = Color3.fromRGB(200, 200, 210)
-subtitle.Text = "Presiona CONTINUAR para entrar"
+subtitle.Text = "CONTINUAR · scripts + Universal fallback"
 subtitle.TextTransparency = 1
 subtitle.Parent = center
 
@@ -474,23 +475,31 @@ local function destroyIntro()
 end
 
 local function runGameLoader()
-	local scriptFile = resolveScriptFile()
-	if scriptFile then
-		local success, err = pcall(function()
-			loadstring(game:HttpGet(BASE_URL .. scriptFile))()
-		end)
-		if not success then
-			warn("[VORTEX X SAGE] Error al cargar el script:", err)
+	local scriptFile = resolveScriptFile() or "Universal.lua"
+	local isUniversal = (scriptFile == "Universal.lua")
+	if isUniversal then
+		print("[VORTEX X SAGE] Juego no listado → Universal Hub | PlaceId="
+			.. tostring(game.PlaceId)
+			.. " GameId="
+			.. tostring(game.GameId)
+			.. " Name="
+			.. tostring(game.Name))
+	end
+	local success, err = pcall(function()
+		loadstring(game:HttpGet(BASE_URL .. scriptFile))()
+	end)
+	if not success then
+		warn("[VORTEX X SAGE] Error al cargar " .. tostring(scriptFile) .. ":", err)
+		-- Si falla el dedicado, intenta Universal
+		if not isUniversal then
+			warn("[VORTEX X SAGE] Intentando Universal.lua como fallback...")
+			local ok2, err2 = pcall(function()
+				loadstring(game:HttpGet(BASE_URL .. "Universal.lua"))()
+			end)
+			if not ok2 then
+				warn("[VORTEX X SAGE] Universal también falló:", err2)
+			end
 		end
-	else
-		warn(
-			"[VORTEX X SAGE] Juego no registrado. PlaceId="
-				.. tostring(game.PlaceId)
-				.. " GameId="
-				.. tostring(game.GameId)
-				.. " Name="
-				.. tostring(game.Name)
-		)
 	end
 end
 
